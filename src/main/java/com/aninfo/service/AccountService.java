@@ -11,12 +11,17 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 
+// @Service indica que es un servicio
+// acá va la lógica de negocio, no debe mezclarse con el controller
+// el controller delega los request a los servicios
+
 @Service
 public class AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
 
+    // simplemente recibe por parámetro la cuenta que se creó y delega al Repository la persistencia
     public Account createAccount(Account account) {
         return accountRepository.save(account);
     }

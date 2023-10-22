@@ -5,7 +5,9 @@ import javax.persistence.*;
 @Entity
 public class Account {
 
+    // @Id indica primary key -> base de datos
     @Id
+    // @GeneratedValue indica key autogenerada
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cbu;
 
