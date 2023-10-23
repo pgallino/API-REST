@@ -7,12 +7,17 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private Long cbu;
     private Double amount;
+
+    private String type;
 
     public Transaction(){
     }
 
-    public Transaction(Double amount) {
+    public Transaction(Long cbu, Double amount) {
+        this.cbu = cbu;
         this.amount = amount;
     }
 
@@ -30,5 +35,13 @@ public class Transaction {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Long getCbu() {
+        return this.cbu;
+    }
+
+    public String getType() {
+        return this.type;
     }
 }

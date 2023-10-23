@@ -3,6 +3,7 @@ package com.aninfo.service;
 import com.aninfo.exceptions.DepositNegativeSumException;
 import com.aninfo.exceptions.InsufficientFundsException;
 import com.aninfo.model.Account;
+import com.aninfo.model.Transaction;
 import com.aninfo.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,10 @@ public class AccountService {
 
     // simplemente recibe por parámetro la cuenta que se creó y delega al Repository la persistencia
     public Account createAccount(Account account) {
+        Double initial_balance = account.getBalance();
+        Long cbu = account.getCbu();
+        Transaction transaction = new Transaction(cbu, initial_balance);
+
         return accountRepository.save(account);
     }
 
@@ -59,8 +64,19 @@ public class AccountService {
     @Transactional
     public Account deposit(Long cbu, Double sum) {
 
+        Double discount = 0.1;
+        Double topDiscount = 500.0;
+
         if (sum <= 0) {
-            throw new DepositNegativeSumException("Cannot deposit negative sums");
+            throw new DepositNegativeSumException("Cannot deposit non positive sums");
+        }
+
+        if (sum >= 2000) {
+            if (sum*discount < 500) {
+                sum += sum*discount;
+            } else {
+                sum += topDiscount;
+            }
         }
 
         Account account = accountRepository.findAccountByCbu(cbu);

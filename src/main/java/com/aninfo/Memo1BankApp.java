@@ -50,32 +50,15 @@ public class Memo1BankApp {
 		return accountService.createAccount(account);
 	}
 
-	@PostMapping("/transactions")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Transaction createTransaction(@RequestBody Transaction transaction) {
-		return transactionService.createTransaction(transaction);
-	}
-
 	@GetMapping("/accounts")
 	public Collection<Account> getAccounts() {
 		return accountService.getAccounts();
-	}
-
-	@GetMapping("/transactions")
-	public Collection<Transaction> getTransactions() {
-		return transactionService.getTransactions();
 	}
 
 	@GetMapping("/accounts/{cbu}")
 	public ResponseEntity<Account> getAccount(@PathVariable Long cbu) {
 		Optional<Account> accountOptional = accountService.findById(cbu);
 		return ResponseEntity.of(accountOptional);
-	}
-
-	@GetMapping("/transactions/{id}")
-	public ResponseEntity<Transaction> getTransaction(@PathVariable Long id) {
-		Optional<Transaction> transactionOptional = transactionService.findById(id);
-		return ResponseEntity.of(transactionOptional);
 	}
 
 	@PutMapping("/accounts/{cbu}")
@@ -95,11 +78,7 @@ public class Memo1BankApp {
 		accountService.deleteById(cbu);
 	}
 
-	@DeleteMapping("/transactions/{id}")
-	public void deleteTransaction(@PathVariable Long id) {
-		transactionService.deleteById(id);
-	}
-
+	/*
 	// estos métodos tienen mala URL -> se agregan los verbos withdraw y deposit -> no cumple REST
 	// se soluciona creando la clase transacción
 	@PutMapping("/accounts/{cbu}/withdraw")
@@ -110,6 +89,33 @@ public class Memo1BankApp {
 	@PutMapping("/accounts/{cbu}/deposit")
 	public Account deposit(@PathVariable Long cbu, @RequestParam Double sum) {
 		return accountService.deposit(cbu, sum);
+	}
+	*/
+
+	/*------------------------------------------------------------------------------------------------------------------*/
+	@PostMapping("/transactions")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Transaction createTransaction(@RequestBody Transaction transaction) {
+		return transactionService.createTransaction(transaction, accountService);
+	}
+
+	@GetMapping("/transactions")
+	public Collection<Transaction> getTransactions() {
+		return transactionService.getTransactions();
+	}
+
+	@GetMapping("/transactions/{id}")
+	public ResponseEntity<Transaction> getTransaction(@PathVariable Long id) {
+		Optional<Transaction> transactionOptional = transactionService.findById(id);
+		return ResponseEntity.of(transactionOptional);
+	}
+
+	@GetMapping("/transactions/cbu/{cbu}")
+	public Collection<Transaction> getTransactionsByCbu(@PathVariable Long cbu) { return transactionService.findByCbu(cbu); }
+
+	@DeleteMapping("/transactions/{id}")
+	public void deleteTransaction(@PathVariable Long id) {
+		transactionService.deleteById(id);
 	}
 
 	@Bean
